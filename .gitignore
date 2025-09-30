@@ -1,0 +1,8 @@
+/node_modules
+
+# Environment Variables
+.env
+
+# Logs and local artifacts
+npm-debug.log*
+*.sqlite
