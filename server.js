@@ -12,6 +12,8 @@ import jwt from 'jsonwebtoken';
 dotenv.config()
 
 const app = express();
+// express middleware to parse files to json
+app.use(express.json());
 
 // build a base route to check if it's working properly
 app.get('/', (req, res) => {
@@ -19,7 +21,7 @@ app.get('/', (req, res) => {
 });
 
 // register route with validation, encrytion, and insertion data to database
-app.post('/register', express.json(), async (req, res) => {
+app.post('/register', async (req, res) => {
     const {name, email, password} = req.body;
     const saltRounds = 10;
 
@@ -57,7 +59,7 @@ app.post('/register', express.json(), async (req, res) => {
 });
 
 // login route with proper authentication 
-app.post('/login', express.json(), async (req, res) => {
+app.post('/login', async (req, res) => {
     const {email, password} = req.body;
 
     // Backend Validation: if any important fields are empty
