@@ -7,11 +7,20 @@ import { authenticateUser } from './authenticateUser_jwt/authenticateUser_jwt.js
 import { fectchMetaAdSpent } from './Meta_API/metaDataFetcher.js';
 import { fetchGoogleAdSpend } from './Google_Ads_API/google_ads_api.js';
 import jwt from 'jsonwebtoken';
+import cors from 'cors';
 
 // Load enviroment variables from .env file
 dotenv.config()
 
 const app = express();
+
+// USE CORS MIDDLEWARE: Allow requests from your React frontend domain/port
+app.use(cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+}))
+
 // express middleware to parse files to json
 app.use(express.json());
 
