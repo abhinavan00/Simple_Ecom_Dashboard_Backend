@@ -1,5 +1,5 @@
 import { getShopifyRestClient } from "./shopify.js";
-import devDb from "../dbConfig.js";
+import db from "../knex_js/dbConfig.js";
 
 // calculate the date 7 days ago and fortmats it as an ISO string
 function getLast7Days() {
@@ -53,7 +53,7 @@ export async function fetchAndStoreShopifyData(userId) {
 
         try {
             // inserting the data into database
-            await devDb('sales_data').insert({
+            await db('sales_data').insert({
                 total_sales: formattedTotalSales,
                 number_of_orders: totalOrders,
                 date: new Date(),

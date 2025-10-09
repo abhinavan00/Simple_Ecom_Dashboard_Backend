@@ -1,6 +1,6 @@
 import express, { response } from 'express';
 import bcrypt from 'bcrypt';
-import devDb from './dbConfig.js';
+import db from './knex_js/dbConfig.js';
 import dotenv from 'dotenv';
 import { fetchAndStoreShopifyData } from './Shopify_API/fetchAndStoreShopifyData.js';
 import { authenticateUser } from './authenticateUser_jwt/authenticateUser_jwt.js';
@@ -8,18 +8,25 @@ import { fectchMetaAdSpent } from './Meta_API/metaDataFetcher.js';
 import { fetchGoogleAdSpend } from './Google_Ads_API/google_ads_api.js';
 import jwt from 'jsonwebtoken';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 // Load enviroment variables from .env file
 dotenv.config()
 
 const app = express();
 
+// --- PRODUCTION-READY CORS CONFIGURATION ---
+const allowedOrigins = process.env.ALLOWED_ORIGIN || 'http://localhost:5173';
+
 // USE CORS MIDDLEWARE: Allow requests from your React frontend domain/port
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }))
+
+// Cookie Parser
+app.use(cookieParser());
 
 // express middleware to parse files to json
 app.use(express.json());
@@ -44,7 +51,7 @@ app.post('/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, saltRounds)
 
         // inserting new user to database
-        const [newUser] = await devDb('users').insert({
+        const [newUser] = await db('users').insert({
             name: name,
             email: email,
             password: hashedPassword
@@ -78,7 +85,7 @@ app.post('/login', async (req, res) => {
     
     try {
         // selecting the user's id, email, and password, then matching the email from database
-        const user = await devDb('users').select('id', 'email', 'password').where('email', email).first();
+        const user = await db('users').select('id', 'email', 'password').where('email', email).first();
         
         // if email doesn't exist throw an error
         if(!user) {
@@ -92,7 +99,15 @@ app.post('/login', async (req, res) => {
         if (matchPassword) {
             // generate a jwt token
             const token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: '1h'});
-            res.status(201).json({message: 'Login Successful', token})
+
+            // Set the cookie instead of returning it in json body
+            res.cookie('authToken', token, {
+                httpOnly: true, // Prevents client side Javascript access
+                secure: process.env.NODE_ENV === 'production', // Use secure only in production (requires HTTPs)
+                sameSite: 'lax', // Good balance for modern we security
+                maxAge: 24 * 60 * 60 * 1000 // 1 Day Expiration
+            })
+            res.status(201).json({message: 'Login Successful'})
         } else {
             // if doesn't match response with an error
             res.status(401).json('Invalid Credentials')
