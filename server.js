@@ -31,12 +31,12 @@ app.use(cookieParser());
 // express middleware to parse files to json
 app.use(express.json());
 
-// build a base route to check if it's working properly
+// BASE ROUTE
 app.get('/', (req, res) => {
     res.json('Working!!')
 });
 
-// register route with validation, encrytion, and insertion data to database
+// REGISTER ROUTE
 app.post('/register', async (req, res) => {
     const {name, email, password} = req.body;
     const saltRounds = 10;
@@ -74,7 +74,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// login route with proper authentication 
+// LOG IN ROUTE
 app.post('/login', async (req, res) => {
     const {email, password} = req.body;
 
@@ -118,7 +118,18 @@ app.post('/login', async (req, res) => {
     }
 })
 
-// === New Unified Route to Integrate and Process all API calls: '/api/dashboard/data' ===
+// LOG OUT ROUTE (Clears the HttpOnly Cookie)
+app.post('/logout', async(req, res) => {
+    res.clearCookie('authToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax'
+    })
+
+    res.status(200).json({message: 'Logged Out Successfully'})
+})
+
+// === New UNIFIED ROUTE to Integrate and Process all API calls: '/api/dashboard/data' ===
 app.get('/api/dashboard/data', authenticateUser, async(req, res) => {
     try{
         // fetch data from all api routes simultaneously
