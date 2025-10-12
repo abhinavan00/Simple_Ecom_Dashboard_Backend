@@ -10,8 +10,8 @@ const client = new GoogleAdsApi({
 // Initialize the customer object with the specific account details for queries
 // NOTE: This uses TEST credentials for now.
 const customer = client.Customer({
-    customer_id: process.env.TEST_AD_ACCOUNT_CUSTOMER_ID,
-    login_customer_id: process.env.GOOGLE_TEST_MANAGER_ACCOUNT_ID,
+    customer_id: process.env.GOOGLE_AD_ACCOUNT_CUSTOMER_ID,
+    login_customer_id: process.env.GOOGLE_ADS_MANAGER_ACCOUNT_ID,
     refresh_token: process.env.GOOGLE_ADS_REFRESH_TOKEN
 })
 

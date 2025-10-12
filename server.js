@@ -98,7 +98,7 @@ app.post('/login', async (req, res) => {
         // if hash password matchs, response with success
         if (matchPassword) {
             // generate a jwt token
-            const token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: '1h'});
+            const token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: '1d'});
 
             // Set the cookie instead of returning it in json body
             res.cookie('authToken', token, {
@@ -127,6 +127,13 @@ app.post('/logout', async(req, res) => {
     })
 
     res.status(200).json({message: 'Logged Out Successfully'})
+})
+
+// PROTECTED ROUTE TO CHECK AUTH STATUS
+app.get('/check-auth', authenticateUser, (req, res) => {
+    // If we reach this line, the `authenticateUser` middleware succeeded.
+    // The cookie was present and valid.
+    res.status(200).json({isAuthenticated: true, userId: req.userId});
 })
 
 // === New UNIFIED ROUTE to Integrate and Process all API calls: '/api/dashboard/data' ===
