@@ -31,6 +31,11 @@ app.use(cookieParser());
 // express middleware to parse files to json
 app.use(express.json());
 
+// Base ROUTE
+app.get('/', (req, res) => {
+    res.send('Wokring!')
+})
+
 // REGISTER ROUTE
 app.post('/register', async (req, res) => {
     const {name, email, password} = req.body;
