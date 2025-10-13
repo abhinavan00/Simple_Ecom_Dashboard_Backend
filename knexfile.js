@@ -41,38 +41,19 @@ const config = {
   },
 
   production: {
-      client: 'postgresql',
-      
-      connection: { 
-          host: process.env.PROD_DB_HOST, // Use a separate variable for the hostname only
-          
-          port: process.env.PROD_DB_PORT || 5432, 
-          
-          database: process.env.PROD_DB_NAME, 
-          
-          user: process.env.PROD_DB_USER, 
-          
-          password: process.env.PROD_DB_PASSWORD, 
-
-          // 6. The CRITICAL FIX for IPv6/ENETUNREACH
-          // This is the networking option for IPv4
-          client: {
-              family: 4 
-          },
-          
-          // 7. Required for secure connection to Supabase
-          ssl: {
-              rejectUnauthorized: false
-          }
+    client: 'postgresql',
+    connection: process.env.DATABASE_URL,  
+    // SSL/TSL for secure connections to a hosted database
+    ssl: {
+        rejectUnauthorized: false
       },
-      
-      pool: {
-        min: 2,
-        max: 10
-      },
-      migrations: {
-        tableName: 'knex_migrations'
-      }
+    pool: {
+      min: 2,
+      max: 10
+    },
+    migrations: {
+      tableName: 'knex_migrations'
+    }
   }
 
 };
