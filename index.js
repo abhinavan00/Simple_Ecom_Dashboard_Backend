@@ -31,11 +31,6 @@ app.use(cookieParser());
 // express middleware to parse files to json
 app.use(express.json());
 
-// BASE ROUTE
-app.get('/', (req, res) => {
-    res.json('Working!!')
-});
-
 // REGISTER ROUTE
 app.post('/register', async (req, res) => {
     const {name, email, password} = req.body;
@@ -103,7 +98,7 @@ app.post('/login', async (req, res) => {
             // Set the cookie instead of returning it in json body
             res.cookie('authToken', token, {
                 httpOnly: true, // Prevents client side Javascript access
-                secure: true, // Use secure only in production (requires HTTPs)
+                secure: process.env.NODE_ENV === 'production', // Use secure only in production (requires HTTPs)
                 sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
                 maxAge: 24 * 60 * 60 * 1000 // 1 Day Expiration
             })
@@ -123,7 +118,7 @@ app.post('/logout', async(req, res) => {
     res.clearCookie('authToken', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
     })
 
     res.status(200).json({message: 'Logged Out Successfully'})
