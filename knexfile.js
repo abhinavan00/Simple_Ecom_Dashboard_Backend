@@ -42,15 +42,20 @@ const config = {
 
   production: {
     client: 'postgresql',
-    connection: process.env.DATABASE_URL,  
-    // SSL/TSL for secure connections to a hosted database
-    ssl: {
-        rejectUnauthorized: false
-      },
-    client: {
-          // '4' stands for IPv4
-          family: 4 
-      },
+    connection: {
+        // Use the full URL string from Railway environment variables
+        connectionString: process.env.DATABASE_URL, 
+        
+        // This is the networking option that forces IPv4
+        client: {
+            family: 4 
+        },
+
+        // SSL/TSL for secure connections to a hosted database (Supabase)
+        ssl: {
+            rejectUnauthorized: false
+        }
+    },
     pool: {
       min: 2,
       max: 10
