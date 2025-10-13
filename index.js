@@ -65,8 +65,6 @@ app.post('/register', async (req, res) => {
         }})
 
     } catch(error) {
-        // Debugging
-        console.error('Error during registration:', error);
         // Backend Validation: if email already exists
         if (error.code === '23505') {
            return res.status(409).json('Email alredy exists!')
@@ -115,8 +113,6 @@ app.post('/login', async (req, res) => {
             res.status(401).json('Invalid Credentials')
         }
     } catch (error) {
-        // debugging
-        console.log(error);
         // handle other unexpected errors
         res.status(500).json('Internal Server Error', error);
     }
