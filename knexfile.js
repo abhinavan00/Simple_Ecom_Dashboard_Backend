@@ -47,6 +47,10 @@ const config = {
     ssl: {
         rejectUnauthorized: false
       },
+    client: {
+          // '4' stands for IPv4
+          family: 4 
+      },
     pool: {
       min: 2,
       max: 10
