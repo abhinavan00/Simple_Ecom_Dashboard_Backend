@@ -42,20 +42,23 @@ const config = {
 
   production: {
     client: 'postgresql',
-    connection: {
-        // Use the full URL string from Railway environment variables
+    
+    // 1. MUST BE AN OBJECT to allow custom properties
+    connection: { 
+        // 2. The URL string goes into this property
         connectionString: process.env.DATABASE_URL, 
         
-        // This is the networking option that forces IPv4
-        client: {
-            family: 4 
-        },
-
-        // SSL/TSL for secure connections to a hosted database (Supabase)
+        // 3. SSL MUST be included inside the connection object
         ssl: {
             rejectUnauthorized: false
+        },
+        
+        // 4. CRITICAL FIX: The networking option for IPv4
+        client: {
+            family: 4 
         }
     },
+    
     pool: {
       min: 2,
       max: 10
