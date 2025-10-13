@@ -104,7 +104,7 @@ app.post('/login', async (req, res) => {
             res.cookie('authToken', token, {
                 httpOnly: true, // Prevents client side Javascript access
                 secure: process.env.NODE_ENV === 'production', // Use secure only in production (requires HTTPs)
-                sameSite: 'lax', // Good balance for modern we security
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
                 maxAge: 24 * 60 * 60 * 1000 // 1 Day Expiration
             })
             res.status(201).json({message: 'Login Successful'})
