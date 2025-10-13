@@ -42,16 +42,11 @@ const config = {
 
   production: {
     client: 'postgresql',
-    connection: {
-      host: process.env.PROD_DB_HOST,
-      database: process.env.PROD_DB_NAME,
-      user:     '',
-      password: '',
-      // SSL/TSL for secure connections to a hosted database
-      ssl: {
+    connection: process.env.DATABASE_URL,  
+    // SSL/TSL for secure connections to a hosted database
+    ssl: {
         rejectUnauthorized: false
-      }
-    },
+      },
     pool: {
       min: 2,
       max: 10

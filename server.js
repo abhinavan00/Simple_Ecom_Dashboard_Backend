@@ -1,6 +1,6 @@
 import express, { response } from 'express';
 import bcrypt from 'bcrypt';
-import db from './knex_js/dbConfig.js';
+import db from './Database_Config/dbConfig.js';
 import dotenv from 'dotenv';
 import { fetchAndStoreShopifyData } from './Shopify_API/fetchAndStoreShopifyData.js';
 import { authenticateUser } from './authenticateUser_jwt/authenticateUser_jwt.js';

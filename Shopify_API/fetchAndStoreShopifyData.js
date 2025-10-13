@@ -1,5 +1,5 @@
 import { getShopifyRestClient } from "./shopify.js";
-import db from "../knex_js/dbConfig.js";
+import db from "../Database_Config/dbConfig.js";
 
 // calculate the date 7 days ago and fortmats it as an ISO string
 function getLast7Days() {

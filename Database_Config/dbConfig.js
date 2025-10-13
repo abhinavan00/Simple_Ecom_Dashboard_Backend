@@ -1,5 +1,5 @@
 import knex from "knex";
-import config from "./knexfile.js";
+import config from "../knexfile.js";
 
 // Determine which configuration to load
 const enviroment = process.env.NODE_ENV === 'production' ? 'production' : 'development';
