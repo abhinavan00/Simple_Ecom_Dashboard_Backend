@@ -103,7 +103,7 @@ app.post('/login', async (req, res) => {
             // Set the cookie instead of returning it in json body
             res.cookie('authToken', token, {
                 httpOnly: true, // Prevents client side Javascript access
-                secure: process.env.NODE_ENV === 'production', // Use secure only in production (requires HTTPs)
+                secure: true, // Use secure only in production (requires HTTPs)
                 sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
                 maxAge: 24 * 60 * 60 * 1000 // 1 Day Expiration
             })
