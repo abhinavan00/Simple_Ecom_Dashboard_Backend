@@ -115,6 +115,8 @@ app.post('/login', async (req, res) => {
             res.status(401).json('Invalid Credentials')
         }
     } catch (error) {
+        // debugging
+        console.log(error);
         // handle other unexpected errors
         res.status(500).json('Internal Server Error', error);
     }
