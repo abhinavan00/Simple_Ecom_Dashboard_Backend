@@ -41,31 +41,38 @@ const config = {
   },
 
   production: {
-    client: 'postgresql',
-    
-    // 1. MUST BE AN OBJECT to allow custom properties
-    connection: { 
-        // 2. The URL string goes into this property
-        connectionString: process.env.DATABASE_URL, 
-        
-        // 3. SSL MUST be included inside the connection object
-        ssl: {
-            rejectUnauthorized: false
-        },
-        
-        // 4. CRITICAL FIX: The networking option for IPv4
-        client: {
-            family: 4 
-        }
-    },
-    
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: 'knex_migrations'
-    }
+      client: 'postgresql',
+      
+      connection: { 
+          host: process.env.PROD_DB_HOST, // Use a separate variable for the hostname only
+          
+          port: process.env.PROD_DB_PORT || 5432, 
+          
+          database: process.env.PROD_DB_NAME, 
+          
+          user: process.env.PROD_DB_USER, 
+          
+          password: process.env.PROD_DB_PASSWORD, 
+
+          // 6. The CRITICAL FIX for IPv6/ENETUNREACH
+          // This is the networking option for IPv4
+          client: {
+              family: 4 
+          },
+          
+          // 7. Required for secure connection to Supabase
+          ssl: {
+              rejectUnauthorized: false
+          }
+      },
+      
+      pool: {
+        min: 2,
+        max: 10
+      },
+      migrations: {
+        tableName: 'knex_migrations'
+      }
   }
 
 };
